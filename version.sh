@@ -1,3 +1,3 @@
 #!/bin/bash
 
-yum list $1 | awk '{print$2}'
+apt-get list $1 | awk '{print$2}'
