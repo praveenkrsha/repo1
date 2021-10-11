@@ -7,5 +7,5 @@ then
         echo "Package  is installed!"
 else
         echo "Installing the Package"
-        sudo yum install $1 -y
+        sudo apt-get install $1 -y
 fi
