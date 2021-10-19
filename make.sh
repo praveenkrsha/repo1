@@ -2,4 +2,6 @@
 
 echo "Making a file as per your input"
 
-sudo touch $1
+touch $1
+
+yum list installed > $1
