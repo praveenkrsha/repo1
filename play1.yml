@@ -40,7 +40,7 @@
         msg: "The results are {{ results }}"
 
     - name: Installing index.html for Nginx
-      template: src=index.html.j2 dest=/opt/html/index.html
+      template: src=index.html dest=/opt/html/index.html
       notify: when_to_start_nginx
 
   handlers:
