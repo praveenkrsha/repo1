@@ -1,0 +1,49 @@
+---
+- name: Installing and hosting static website for Nginx
+  hosts: opstreeapp
+  become: true
+  vars:
+      group_name: EthanHunt
+      port_number: 8040
+      path: /opt/html
+  tasks:
+
+    - name: Gathering facts
+      setup: filter=ansible_os_family
+      register: myop
+
+    - name: Showing result of facts
+      debug:
+        msg: "The results are {{ myop }}"
+
+    - name: Processing OS and installing Nginx
+      yum: name=nginx state=present
+      when: ansible_os_family == "RedHat"
+
+    - name: Processing OS and installing Nginx
+      apt: name=nginx state=present
+      when: ansible_os_family == "Debian"
+
+    - name: Creating Document Root Directory
+      file: path=/opt/html state=directory
+
+    - name: Configuration of Nginx conf
+      template: src=/opt/opstree/nginx.conf.j2 dest=/etc/nginx/nginx.conf
+      notify: when_to_start_nginx
+  
+    - name: Checking file
+      command: ls /var/www/html/index.html
+      register: results
+
+    - name: Showing Result of mentioned file
+      debug:
+        msg: "The results are {{ results }}"
+
+    - name: Installing index.html for Nginx
+      template: src=/var/www/html/index.html.j2 dest=/opt/html/index.html
+      notify: when_to_start_nginx
+
+  handlers:
+    - name: when_to_start_nginx
+      service: name=nginx state=restarted
+
